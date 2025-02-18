@@ -107,20 +107,20 @@
     border-radius: 4px;
 }
 
-.edit-button {
+.transactions-list .edit-button {
     background: #ffc107;
     color: black;
 }
 
-.edit-button:hover {
+.transactions-list .edit-button:hover {
     background: #e0a800;
 }
 
-.delete-button {
+.transactions-list .delete-button {
     background: #dc3545;
     color: white;
 }
 
-.delete-button:hover {
+.transactions-list .delete-button:hover {
     background: #c82333;
 }
