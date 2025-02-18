@@ -1,10 +1,11 @@
-import Navbar from "./Navbar";
+import { Box, Typography } from "@mui/material";
 import useTracker from "../hooks/useTrack";
+import Navbar from "./Navbar";
 
 const Header = () => {
     const { tracker } = useTracker();
 
-    // Hitung total expenses dan incomes
+    // Calculate total expenses and incomes
     const totalExpenses = tracker
         .filter(item => item.category === "expenses")
         .reduce((sum, item) => sum + Number(item.amount), 0);
@@ -14,18 +15,20 @@ const Header = () => {
         .reduce((sum, item) => sum + Number(item.amount), 0);
 
     return (
-        <header className="header">
-            <div className="header_position">
-                <div className="header__title-bar">
-                    <h1>Expense Tracker</h1>
-                </div>
-                <div className="header__tracker">
-                    <p><strong>Expenses:</strong> Rp {totalExpenses.toLocaleString()}</p>
-                    <p><strong>Incomes:</strong> Rp {totalIncomes.toLocaleString()}</p>
-                </div>
-            </div>
+        <Box sx={{ backgroundColor: "#fff", padding: "1em", boxShadow: 2, position: "sticky", top: 0, zIndex: 1 }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "2px solid #000", paddingBottom: "0.5em" }}>
+                <Typography variant="h4">Expense Tracker</Typography>
+                <Box sx={{ textAlign: "right", fontWeight: 600 }}>
+                    <Typography variant="body1">
+                        <strong>Expenses:</strong> Rp {totalExpenses.toLocaleString()}
+                    </Typography>
+                    <Typography variant="body1">
+                        <strong>Incomes:</strong> Rp {totalIncomes.toLocaleString()}
+                    </Typography>
+                </Box>
+            </Box>
             <Navbar />
-        </header>
+        </Box>
     );
 };
 

@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, FC } from "react";
+import { calculateTotal } from "../utils/helper";
 
 export type TrackerType = {
     id: string;
@@ -35,13 +36,9 @@ export const TrackerProvider: FC<{ children: React.ReactNode }> = ({ children })
     }, [tracker]);
 
     const updateTotals = () => {
-        const expenseTotal = tracker
-            .filter((t) => t.category === "expenses")
-            .reduce((sum, t) => sum + t.amount, 0);
-        const incomeTotal = tracker
-            .filter((t) => t.category === "incomes")
-            .reduce((sum, t) => sum + t.amount, 0);
-        
+        const expenseTotal = calculateTotal(tracker, "expenses");
+        const incomeTotal = calculateTotal(tracker, "incomes");
+
         setTotalExpense(expenseTotal);
         setTotalIncome(incomeTotal);
     };

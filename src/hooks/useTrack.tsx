@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { TrackerContext, TrackerContextType } from "../contexts/trackerProvider";
+import { TrackerContext } from "../contexts/trackerProvider";
 
-const useTracker = (): TrackerContextType => {
+export const useTracker = () => {
     const context = useContext(TrackerContext);
 
     if (!context) {
