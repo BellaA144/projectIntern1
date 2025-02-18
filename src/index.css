@@ -12,34 +12,6 @@ body {
   background-color: #a2bcf5;
 }
 
-.navbar{
-  margin-top: 0.5em;
-  text-align: right;
-}
-
-.navbar ul {
-  list-style: none;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  gap: 1em;
-  font-size: 1.3em;
-}
-
-.navbar li {
-  display: inline;
-}
-
-.navbar a {
-  color: black;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.navbar a:hover {
-  text-decoration: underline;
-}
-
 main {
   width: 100vw;
   height: 100vh;
