@@ -26,20 +26,35 @@ const SummaryPage = () => {
     // Filter & Gabungkan Data Income + Expense
     const mergedData = useMemo(() => {
         const now = new Date();
-
-        return tracker
+        const dataMap = new Map();
+    
+        tracker
             .filter((t) => {
                 const transactionDate = new Date(t.date);
                 const diffInDays = Math.floor((now.getTime() - transactionDate.getTime()) / (1000 * 60 * 60 * 24));
                 return diffInDays <= selectedRange;
             })
-            .map((t) => ({
-                date: t.date,
-                income: t.category === "incomes" ? t.amount : 0, // Masukkan amount ke field income
-                expense: t.category === "expenses" ? t.amount : 0, // Masukkan amount ke field expense
-            }))
-            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // Urutkan dari tanggal lama ke baru
+            .forEach((t) => {
+                if (!dataMap.has(t.date)) {
+                    dataMap.set(t.date, { date: t.date, income: 0, expense: 0 });
+                }
+    
+                // Pastikan entry selalu bertipe Number
+                const entry = dataMap.get(t.date);
+                if (t.category === "incomes") {
+                    entry.income += Number(t.amount);
+                } else if (t.category === "expenses") {
+                    entry.expense += Number(t.amount);
+                }
+    
+                // Perbarui dataMap dengan entry yang telah diubah
+                dataMap.set(t.date, entry);
+            });
+    
+        return Array.from(dataMap.values()).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     }, [tracker, selectedRange]);
+    
+    console.log("Merged Data:", mergedData);
 
     // Hitung nilai tertinggi dari income atau expense untuk batas Y-axis
     const maxValue = useMemo(() => {
