@@ -3,6 +3,7 @@ import { useTracker } from "../hooks/useTrack"; // Mengimpor custom hook
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { Card, CardContent, Typography, Grid, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { groupTransactionsByDate } from "../utils/groupTransactions"; // Impor fungsi utilitas
 
 const HomePage = () => {
     const theme = useTheme();
@@ -18,34 +19,30 @@ const HomePage = () => {
 
     // Menggunakan useMemo untuk data pengeluaran
     const expenseData = useMemo(() => 
-        recentTransactions
-            .filter(t => t.category === "expenses")
-            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
+        groupTransactionsByDate(recentTransactions, "expenses"),
         [recentTransactions]
     );
 
     // Menggunakan useMemo untuk data pemasukan
     const incomeData = useMemo(() => 
-        recentTransactions
-            .filter(t => t.category === "incomes")
-            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
+        groupTransactionsByDate(recentTransactions, "incomes"),
         [recentTransactions]
     );
 
     // Menghitung total pengeluaran dan pemasukan dalam satu minggu terakhir
     const totalExpense = useMemo(() => 
-        expenseData.reduce((sum, t) => sum + Number(t.amount), 0),
+        expenseData.reduce((sum, t) => sum + t.expense, 0),
         [expenseData]
     );
 
     const totalIncome = useMemo(() => 
-        incomeData.reduce((sum, t) => sum + Number(t.amount), 0),
+        incomeData.reduce((sum, t) => sum + t.income, 0),
         [incomeData]
     );
 
     // Menentukan nilai maksimum pengeluaran dan pemasukan
-    const maxExpense = Math.max(...expenseData.map((d) => d.amount), 100);
-    const maxIncome = Math.max(...incomeData.map((d) => d.amount), 100);
+    const maxExpense = Math.max(...expenseData.map((d) => d.expense), 100);
+    const maxIncome = Math.max(...incomeData.map((d) => d.income), 100);
 
     // Data untuk grafik pie
     const pieData = [
@@ -69,7 +66,7 @@ const HomePage = () => {
                                     <XAxis fontSize={10} dataKey="date" />
                                     <YAxis fontSize={10} domain={[0, maxExpense]} />
                                     <Tooltip />
-                                    <Line type="monotone" dataKey="amount" stroke={theme.palette.error.main} strokeWidth={2} />
+                                    <Line type="monotone" dataKey="expense" stroke={theme.palette.error.main} strokeWidth={2} />
                                 </LineChart>
                             </ResponsiveContainer>
                             <Typography>Total Pengeluaran: Rp {totalExpense.toLocaleString("id-ID")}</Typography>
@@ -85,7 +82,7 @@ const HomePage = () => {
                                     <XAxis fontSize={10} dataKey="date" />
                                     <YAxis fontSize={10} domain={[0, maxIncome]} />
                                     <Tooltip />
-                                    <Line type="monotone" dataKey="amount" stroke={theme.palette.success.main} strokeWidth={2} />
+                                    <Line type="monotone" dataKey="income" stroke={theme.palette.success.main} strokeWidth={2} />
                                 </LineChart>
                             </ResponsiveContainer>
                             <Typography>Total Pemasukan: Rp {totalIncome.toLocaleString("id-ID")}</Typography>
