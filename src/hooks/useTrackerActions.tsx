@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const API_BASE_URL = "http://localhost:5000";
 
-// Ambil semua transaksi dari database JSON
+// Ambil semua transaksi dari API_BASE_URL
 export const fetchTransactions = async () => {
     try {
         const expenses = await (await fetch(`${API_BASE_URL}/expenses`)).json();
